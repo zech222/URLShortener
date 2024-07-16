@@ -42,8 +42,8 @@ namespace URLShortener.Services
         private async Task<string> CreateShortUrl()
         {
             var currUrl = await _urlRepository.GetLastIndex();
-            var strings = ToBase26(currUrl.Id);
-            return strings;
+            var url = ToBase26(currUrl.Id);
+            return url;
         }
 
         private string ToBase26(int number)
