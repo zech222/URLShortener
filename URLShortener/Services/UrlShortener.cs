@@ -1,4 +1,8 @@
-﻿using URLShortener.Models;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.Buffers.Text;
+using System.Text;
+using System.Threading.Tasks;
+using URLShortener.Models;
 using URLShortener.Repositories;
 using static URLShortener.Controllers.UrlController;
 
@@ -13,24 +17,45 @@ namespace URLShortener.Services
             _urlRepository = urlRepository;
         }
 
-        public async Task<string> ShortenUrlAsync(Urls url)
+        public async Task<string> ShortenUrlAsync(string longUrl)
         {
-            //check url
-            var shortUrl = GetShortUrl(url.LongUrl);
-            await _urlRepository.AddUrlAsync(url.LongUrl, shortUrl);
+            if (longUrl.IsNullOrEmpty())
+                throw new ArgumentException("Long URL cannot be null");
+
+            var shortUrl = await CreateShortUrl();
+            await _urlRepository.AddUrlAsync(shortUrl,longUrl);
             return shortUrl;
         }
 
         public async Task<string> GetLongUrl(string shortUrl)
         {
-            //check url
-            return await _urlRepository.GetLongUrlAsync(shortUrl);
-            //check respond
+            if (shortUrl.IsNullOrEmpty())
+                throw new ArgumentException("Short URL cannot be null");
+
+            var longUrl = await _urlRepository.GetLongUrlAsync(shortUrl);
+
+            if (longUrl.IsNullOrEmpty())
+                throw new ArgumentException("Short URL cannot be found");
+
+            return longUrl;
         }
-        private string GetShortUrl(string longUrl)
+        private async Task<string> CreateShortUrl()
         {
-            //TBD
-            return "shortUrl";
+            var currUrl = await _urlRepository.GetLastIndex();
+            var strings = ToBase26(currUrl.Id);
+            return strings;
+        }
+
+        private string ToBase26(int number)
+        {
+            var abc = "abcdefghijklmnopqrstuvwxyz";
+            var result = new StringBuilder();
+            while (number >= 0)
+            {
+                result.Insert(0, abc[number % 26]);
+                number = number / 26-1;
+            }
+            return result.ToString();
         }
     }
 }

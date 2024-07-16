@@ -20,7 +20,7 @@ namespace URLShortener.Controllers
         [HttpPost("ShortenUrl")]
         public async Task<IActionResult> ShortenUrl([FromBody] Urls url)
         {
-            var shortUrl = await _urlShortener.ShortenUrlAsync(url);
+            var shortUrl = await _urlShortener.ShortenUrlAsync(url.LongUrl);
             return Ok(shortUrl);
         }
 
