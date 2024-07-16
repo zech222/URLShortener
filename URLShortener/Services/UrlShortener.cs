@@ -13,11 +13,19 @@ namespace URLShortener.Services
             _urlRepository = urlRepository;
         }
 
-        public async Task<string> ShortenUrlAsync(Urls Url)
+        public async Task<string> ShortenUrlAsync(Urls url)
         {
-            var shortUrl = GetShortUrl(Url.LongUrl);
-            await _urlRepository.AddUrlAsync(Url.LongUrl, shortUrl);
+            //check url
+            var shortUrl = GetShortUrl(url.LongUrl);
+            await _urlRepository.AddUrlAsync(url.LongUrl, shortUrl);
             return shortUrl;
+        }
+
+        public async Task<string> GetLongUrl(string shortUrl)
+        {
+            //check url
+            return await _urlRepository.GetLongUrlAsync(shortUrl);
+            //check respond
         }
         private string GetShortUrl(string longUrl)
         {

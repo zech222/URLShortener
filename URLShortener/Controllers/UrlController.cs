@@ -17,16 +17,18 @@ namespace URLShortener.Controllers
             _urlShortener = urlShortener;
         }
 
-        [HttpPost("shorten")]
+        [HttpPost("ShortenUrl")]
         public async Task<IActionResult> ShortenUrl([FromBody] Urls url)
         {
             var shortUrl = await _urlShortener.ShortenUrlAsync(url);
             return Ok(shortUrl);
         }
 
-        public IActionResult Privacy()
+        [HttpGet("GetLongUrl")]
+        public async Task<IActionResult> GetLongUrl([FromBody] Urls url)
         {
-            return View();
+            var shortUrl = await _urlShortener.GetLongUrl(url.ShortUrl);
+            return Ok(shortUrl);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

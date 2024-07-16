@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+//hide this
 var connectionString = "Server=(LocalDb)\\MSSQLLocalDB;Database=UrlShortenerDB;Trusted_Connection=True;";
 builder.Services.AddSingleton(new UrlRepository(connectionString));
 builder.Services.AddSingleton<UrlShortener>();
