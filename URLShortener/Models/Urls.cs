@@ -1,0 +1,9 @@
+﻿namespace URLShortener.Models
+{
+    public class Urls
+    {
+        public string ShortUrl { get; set; }
+        public string LongUrl  { get; set; }     
+
+    }
+}

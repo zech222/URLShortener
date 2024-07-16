@@ -1,21 +1,27 @@
+using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using URLShortener.Models;
+using URLShortener.Services;
 
 namespace URLShortener.Controllers
 {
-    public class HomeController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UrlController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly UrlShortener _urlShortener;
 
-        public HomeController(ILogger<HomeController> logger)
+        public UrlController(UrlShortener urlShortener)
         {
-            _logger = logger;
+            _urlShortener = urlShortener;
         }
 
-        public IActionResult Index()
+        [HttpPost("shorten")]
+        public async Task<IActionResult> ShortenUrl([FromBody] Urls url)
         {
-            return View();
+            var shortUrl = await _urlShortener.ShortenUrlAsync(url);
+            return Ok(shortUrl);
         }
 
         public IActionResult Privacy()

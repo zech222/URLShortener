@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using static URLShortener.Controllers.UrlController;
 
 namespace URLShortener.Repositories
 {
@@ -17,7 +18,7 @@ namespace URLShortener.Repositories
             using(IDbConnection db= new SqlConnection(_connectionString))
             {
                 var query = "INSERT INTO Urls (LongUrl, ShortUrl) VALUES (@LongUrl,@ShortUrl )";
-                await db.ExecuteAsync(query,new {LongUrl=longURL,ShortURL = shortURL});
+                await db.ExecuteAsync(query,new {LongUrl= longURL, ShortURL = shortURL});
             }
         }
     }
