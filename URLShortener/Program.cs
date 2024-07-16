@@ -1,8 +1,13 @@
+using URLShortener.Repositories;
+using URLShortener.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+var connectionString = "Server=(LocalDb)\\MSSQLLocalDB;Database=UrlShortenerDB2;Trusted_Connection=True;";
+builder.Services.AddSingleton(new UrlRepository(connectionString));
+builder.Services.AddSingleton<UrlShortener>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
